@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
 import { map, pluck, tap } from 'rxjs/operators'
 
@@ -14,8 +14,9 @@ const apiURL = environment.api
 })
 export class AcoesService {
   constructor(private httpClient: HttpClient) { }
-  getAcoes() {
-    return this.httpClient.get<AcoesAPI>(`${apiURL}/acoes`).pipe(
+  getAcoes(valor?: string) {
+    const params = valor ? new HttpParams().append('valor', valor) : undefined
+    return this.httpClient.get<AcoesAPI>(`${apiURL}/acoes`, { params }).pipe(
       tap(valor => console.log(valor)),
       pluck('payload'),
       map(acoes =>
